@@ -45,7 +45,21 @@ export const createPostInfo = (node) => {
   return postInfo;
 };
 
-export const buildQuery = () => {
+export const buildQuery = ({ count, address, topic } = {}) => {
+  count = Math.min(100, count || 100);
+  let ownersFilter = "";
+  if (address) {
+    ownersFilter = `owners: ["${address}],`;
+  }
+
+  let topicFilter = "";
+  if (topic) {
+    topicFilter = `{
+      name: "Topic",
+      values: ["${topic}"]
+    },`;
+  }
+
   const queryObject = {
     query: `{
     transactions(first: 100,

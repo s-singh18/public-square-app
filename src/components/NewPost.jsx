@@ -27,6 +27,9 @@ export const NewPost = (props) => {
       if (props.onPostMessage) {
         props.onPostMessage(result.id);
       }
+      if (topicValue) {
+        tx.addTag("Topic", topicValue);
+      }
     } catch (err) {
       console.error(err);
     }

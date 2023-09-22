@@ -19,6 +19,17 @@ import "./App.css";
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
+async function getPostInfos(ownerAddress, topic) {
+  const query = buildQuery({ address: ownerAddress, topic });
+  const results = await arweave.api.post("/graphql", query).catch((err) => {
+    console.error("GraphQL query failed");
+    throw new Error(err);
+  });
+  const edges = results.data.data.transactions.edges;
+  console.log(edges);
+  return edges.map((edge) => createPostInfo(edge.node));
+}
+
 async function waitForNewPosts(txid) {
   let count = 0;
   let foundPost = null;
@@ -35,17 +46,6 @@ async function waitForNewPosts(txid) {
   let i = posts.indexOf(foundPost);
   posts.unshift(posts.splice(i, 1)[0]);
   return posts;
-}
-
-async function getPostInfos() {
-  const query = buildQuery();
-  const results = await arweave.api.post("/graphql", query).catch((err) => {
-    console.error("GraphQL query failed");
-    throw new Error(err);
-  });
-  const edges = results.data.data.transactions.edges;
-  console.log(edges);
-  return edges.map((edge) => createPostInfo(edge.node));
 }
 
 const App = () => {

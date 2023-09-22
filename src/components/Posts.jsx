@@ -21,6 +21,15 @@ const PostItem = (props) => {
     props.postInfo.imgSrc || "img_avatar.png"
   );
 
+  const renderTopic = (topic) => {
+    if (topic)
+      return (
+        <Link to={`/topics/${topic}`} className="postTopic">
+          #{topic}
+        </Link>
+      );
+  };
+
   React.useEffect(() => {
     const getAccountInfo = async () => {
       setOwnerName(abbreviateAddress(props.postInfo.owner));
@@ -35,14 +44,6 @@ const PostItem = (props) => {
     };
     getAccountInfo();
 
-    const renderTopic = (topic) => {
-      if (topic)
-        return (
-          <Link to={`/topics/${topic}`} className="postTopic">
-            #{topic}
-          </Link>
-        );
-    };
     let newPostMessage = "";
     let newStatus = "";
 
